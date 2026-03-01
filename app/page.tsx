@@ -276,7 +276,21 @@ export default function QuizPage() {
               ☕ {result.coffee}
             </p>
           </div>
-          <button style={buttonStyle} onClick={startQuiz}>
+          <button
+            style={buttonStyle}
+            onClick={() => {
+              const text = `I got "${result.name}" on the Coffee Personality Quiz! My perfect brew: ${result.coffee} ${result.emoji}`;
+              if (navigator.share) {
+                navigator.share({ title: "My Coffee Personality", text, url: 'https://quiz-project-beta-teal.vercel.app' });
+              } else {
+                navigator.clipboard.writeText(text + '\nhttps://quiz-project-beta-teal.vercel.app');
+                alert('Copied to clipboard!');
+              }
+            }}
+          >
+            Share My Result 🔗
+          </button>
+          <button style={{ ...buttonStyle, marginTop: '12px', background: 'transparent', color: '#aaa', border: '2px solid #eee' }} onClick={startQuiz}>
             Retake Quiz 🔄
           </button>
         </div>

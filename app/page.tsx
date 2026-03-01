@@ -99,8 +99,6 @@ const bgStyle: React.CSSProperties = {
 
 const cardStyle: React.CSSProperties = {
   background: 'white',
-  borderRadius: '30px',
-  padding: '48px 40px',
   maxWidth: '540px',
   width: '100%',
   boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
@@ -155,10 +153,10 @@ export default function QuizPage() {
   if (screen === 'intro') {
     return (
       <div style={bgStyle}>
-        <div style={cardStyle}>
+        <div style={cardStyle} className="quiz-card">
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '64px', marginBottom: '16px' }}>☕</div>
-            <h1 style={{ fontSize: '32px', fontWeight: '800', color: '#333', marginBottom: '16px', lineHeight: 1.2 }}>
+            <h1 className="quiz-intro-title" style={{ fontWeight: '800', color: '#333', marginBottom: '16px', lineHeight: 1.2 }}>
               What&apos;s Your Coffee Personality?
             </h1>
             <p style={{ color: '#888', fontSize: '16px', lineHeight: 1.6 }}>
@@ -178,7 +176,7 @@ export default function QuizPage() {
     const q = questions[currentQ];
     return (
       <div style={bgStyle}>
-        <div style={cardStyle}>
+        <div style={cardStyle} className="quiz-card">
           {/* Progress dots */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '32px' }}>
             {questions.map((_, i) => (
@@ -250,13 +248,13 @@ export default function QuizPage() {
   const result = getResult();
   return (
     <div style={bgStyle}>
-      <div style={cardStyle}>
+      <div style={cardStyle} className="quiz-card">
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '72px', marginBottom: '16px' }}>{result.emoji}</div>
           <p style={{ color: '#f5576c', fontWeight: '700', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>
             Your Coffee Personality
           </p>
-          <h2 style={{ fontSize: '30px', fontWeight: '800', color: '#333', marginBottom: '16px' }}>
+          <h2 className="quiz-result-name" style={{ fontWeight: '800', color: '#333', marginBottom: '16px' }}>
             {result.name}
           </h2>
           <p style={{ color: '#666', fontSize: '16px', lineHeight: 1.6, marginBottom: '24px' }}>

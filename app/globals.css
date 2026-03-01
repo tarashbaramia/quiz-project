@@ -3,3 +3,31 @@
 body {
   font-family: var(--font-nunito), 'Nunito', sans-serif;
 }
+
+.quiz-card {
+  padding: 48px 40px;
+  border-radius: 30px;
+}
+
+.quiz-intro-title {
+  font-size: 32px;
+}
+
+.quiz-result-name {
+  font-size: 30px;
+}
+
+@media (max-width: 480px) {
+  .quiz-card {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+
+  .quiz-intro-title {
+    font-size: 24px;
+  }
+
+  .quiz-result-name {
+    font-size: 24px;
+  }
+}

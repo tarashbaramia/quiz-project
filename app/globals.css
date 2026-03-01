@@ -31,3 +31,34 @@ body {
     font-size: 24px;
   }
 }
+
+/* Coffee split loader animations */
+@keyframes coffeeCenter {
+  0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+  25%  { transform: scale(1.3) rotate(5deg);  opacity: 1; }
+  45%  { transform: scale(1)   rotate(0deg);  opacity: 1; }
+  65%  { transform: scale(1)   rotate(0deg);  opacity: 0; }
+  100% { transform: scale(1);                 opacity: 0; }
+}
+
+@keyframes coffeeSplitLeft {
+  0%, 60% { transform: translateX(0)    scale(1)   rotate(0deg);   opacity: 0; }
+  65%      { transform: translateX(0)    scale(1)   rotate(0deg);   opacity: 1; }
+  100%     { transform: translateX(-90px) scale(0.4) rotate(-20deg); opacity: 0; }
+}
+
+@keyframes coffeeSplitRight {
+  0%, 60% { transform: translateX(0)   scale(1)   rotate(0deg);  opacity: 0; }
+  65%      { transform: translateX(0)   scale(1)   rotate(0deg);  opacity: 1; }
+  100%     { transform: translateX(90px) scale(0.4) rotate(20deg); opacity: 0; }
+}
+
+@keyframes brewingPulse {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1;   }
+}
+
+.coffee-center  { animation: coffeeCenter     1.6s ease-in-out forwards; }
+.coffee-left    { animation: coffeeSplitLeft  1.6s ease-in-out forwards; }
+.coffee-right   { animation: coffeeSplitRight 1.6s ease-in-out forwards; }
+.brewing-text   { animation: brewingPulse     0.8s ease-in-out infinite; }

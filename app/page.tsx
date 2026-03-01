@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type Personality = {
   name: string;
@@ -119,7 +119,7 @@ const buttonStyle: React.CSSProperties = {
 };
 
 export default function QuizPage() {
-  const [screen, setScreen] = useState<'intro' | 'quiz' | 'result'>('intro');
+  const [screen, setScreen] = useState<'intro' | 'quiz' | 'loading' | 'result'>('intro');
   const [currentQ, setCurrentQ] = useState(0);
   const [tally, setTally] = useState([0, 0, 0, 0]);
   const [selected, setSelected] = useState<number | null>(null);
@@ -137,13 +137,20 @@ export default function QuizPage() {
     newTally[selected] += 1;
     if (currentQ + 1 >= questions.length) {
       setTally(newTally);
-      setScreen('result');
+      setScreen('loading');
     } else {
       setTally(newTally);
       setCurrentQ(currentQ + 1);
       setSelected(null);
     }
   }
+
+  useEffect(() => {
+    if (screen === 'loading') {
+      const timer = setTimeout(() => setScreen('result'), 1800);
+      return () => clearTimeout(timer);
+    }
+  }, [screen]);
 
   function getResult(): Personality {
     return personalities[tally.indexOf(Math.max(...tally))];
@@ -177,20 +184,25 @@ export default function QuizPage() {
     return (
       <div style={bgStyle}>
         <div style={cardStyle} className="quiz-card">
-          {/* Progress dots */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '32px' }}>
-            {questions.map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  borderRadius: '50%',
-                  background: i <= currentQ ? '#f5576c' : '#eee',
-                  transition: 'background 0.3s',
-                }}
-              />
-            ))}
+          {/* Progress bar */}
+          <div style={{ marginBottom: '28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '13px', fontWeight: '700', color: '#f5576c' }}>
+                Question {currentQ + 1} of {questions.length}
+              </span>
+              <span style={{ fontSize: '13px', fontWeight: '600', color: '#bbb' }}>
+                {Math.round(((currentQ + 1) / questions.length) * 100)}%
+              </span>
+            </div>
+            <div style={{ background: '#eee', borderRadius: '50px', height: '8px', overflow: 'hidden' }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #f5576c, #fda085)',
+                height: '100%',
+                width: `${((currentQ + 1) / questions.length) * 100}%`,
+                borderRadius: '50px',
+                transition: 'width 0.4s ease',
+              }} />
+            </div>
           </div>
 
           {/* Question */}
@@ -239,6 +251,26 @@ export default function QuizPage() {
           >
             {currentQ + 1 >= questions.length ? 'See My Result 🎉' : 'Next →'}
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Loading Screen ---
+  if (screen === 'loading') {
+    return (
+      <div style={bgStyle}>
+        <div style={cardStyle} className="quiz-card">
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ position: 'relative', height: '90px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+              <span className="coffee-center" style={{ fontSize: '60px', position: 'absolute' }}>☕</span>
+              <span className="coffee-left"   style={{ fontSize: '48px', position: 'absolute' }}>☕</span>
+              <span className="coffee-right"  style={{ fontSize: '48px', position: 'absolute' }}>☕</span>
+            </div>
+            <p className="brewing-text" style={{ color: '#f5576c', fontWeight: '700', fontSize: '18px' }}>
+              Brewing your result...
+            </p>
+          </div>
         </div>
       </div>
     );

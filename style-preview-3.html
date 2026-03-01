@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Style 3 - Bold & Dramatic</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: #0a0a0a;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .label {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .card {
+    max-width: 560px;
+    width: 100%;
+    padding: 16px;
+  }
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 48px;
+  }
+  .logo {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .step-count {
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+  }
+  .progress {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 56px;
+  }
+  .bar {
+    height: 3px;
+    flex: 1;
+    background: #222;
+    border-radius: 2px;
+  }
+  .bar.done { background: #fff; }
+  .bar.active { background: #e040fb; }
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 40px;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option {
+    padding: 20px 24px;
+    border: 1px solid #222;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .option:hover { border-color: #444; color: #fff; }
+  .option.selected { border-color: #e040fb; color: #fff; background: rgba(224,64,251,0.08); }
+  .option-letter {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #555;
+    flex-shrink: 0;
+  }
+  .option.selected .option-letter { background: #e040fb; color: #fff; }
+  .next-btn {
+    margin-top: 32px;
+    width: 100%;
+    padding: 18px;
+    background: #e040fb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="label">STYLE 3 — Bold & Dramatic</div>
+<div class="card">
+  <div class="top-bar">
+    <div class="logo">Coffee Quiz</div>
+    <div class="step-count">2 / 5</div>
+  </div>
+  <div class="progress">
+    <div class="bar done"></div>
+    <div class="bar active"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+  <h1>It's Friday night. What are you watching?</h1>
+  <div class="options">
+    <div class="option selected"><div class="option-letter">A</div> An action-packed thriller — edge of my seat</div>
+    <div class="option"><div class="option-letter">B</div> A calm documentary — something to learn from</div>
+    <div class="option"><div class="option-letter">C</div> A comedy with friends — the more the merrier</div>
+    <div class="option"><div class="option-letter">D</div> Whatever's on — I'm not picky</div>
+  </div>
+  <button class="next-btn">Next →</button>
+</div>
+</body>
+</html>

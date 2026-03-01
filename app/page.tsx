@@ -1,65 +1,286 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+
+type Personality = {
+  name: string;
+  tagline: string;
+  coffee: string;
+  emoji: string;
+};
+
+const personalities: Personality[] = [
+  {
+    name: 'Bold Adventurer',
+    tagline: 'You live life at full intensity. Pure, powerful, no apologies.',
+    coffee: 'Double Espresso',
+    emoji: '🔥',
+  },
+  {
+    name: 'Zen Minimalist',
+    tagline: 'Simplicity is your superpower. You find beauty in the details.',
+    coffee: 'Single-Origin Pour Over',
+    emoji: '🍃',
+  },
+  {
+    name: 'Social Butterfly',
+    tagline: 'You bring warmth wherever you go. Life is better shared.',
+    coffee: 'Oat Milk Latte',
+    emoji: '🦋',
+  },
+  {
+    name: 'Practical Pragmatist',
+    tagline: 'Reliable, efficient, and always delivers. Just like you.',
+    coffee: 'Cold Brew',
+    emoji: '⚡',
+  },
+];
+
+type Option = { label: string; emoji: string; personality: number };
+type Question = { text: string; options: Option[] };
+
+const questions: Question[] = [
+  {
+    text: 'How do you typically start your morning?',
+    options: [
+      { emoji: '🚀', label: 'Jump up ready to conquer the day', personality: 0 },
+      { emoji: '🧘', label: 'Ease in with quiet meditation', personality: 1 },
+      { emoji: '📱', label: 'Check in with friends right away', personality: 2 },
+      { emoji: '☕', label: 'Follow my reliable daily routine', personality: 3 },
+    ],
+  },
+  {
+    text: 'What is your ideal weekend activity?',
+    options: [
+      { emoji: '🪂', label: 'Something thrilling and spontaneous', personality: 0 },
+      { emoji: '🌲', label: 'A solo hike in quiet nature', personality: 1 },
+      { emoji: '🥳', label: 'Brunch with a big group of friends', personality: 2 },
+      { emoji: '📋', label: 'Getting my to-do list done', personality: 3 },
+    ],
+  },
+  {
+    text: 'How do you handle a stressful situation?',
+    options: [
+      { emoji: '⚡', label: 'Face it head-on, no hesitation', personality: 0 },
+      { emoji: '🌊', label: 'Breathe deeply and take it slowly', personality: 1 },
+      { emoji: '💬', label: 'Talk it through with friends', personality: 2 },
+      { emoji: '📝', label: 'Make a list and work through it', personality: 3 },
+    ],
+  },
+  {
+    text: 'Pick your travel style:',
+    options: [
+      { emoji: '🗺️', label: 'Off the beaten path, totally unplanned', personality: 0 },
+      { emoji: '🏯', label: 'One destination, deep slow travel', personality: 1 },
+      { emoji: '🚌', label: 'Group tour, meet lots of new people', personality: 2 },
+      { emoji: '✈️', label: 'Carefully planned itinerary', personality: 3 },
+    ],
+  },
+  {
+    text: 'Which best describes your work style?',
+    options: [
+      { emoji: '💡', label: 'Creative risk-taker, thinks big', personality: 0 },
+      { emoji: '🎯', label: 'Deep focus, clean minimal workspace', personality: 1 },
+      { emoji: '🤝', label: 'Team-first, loves collaboration', personality: 2 },
+      { emoji: '📊', label: 'Efficient and results-driven', personality: 3 },
+    ],
+  },
+];
+
+const bgStyle: React.CSSProperties = {
+  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fda085 100%)',
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '24px',
+  fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+};
+
+const cardStyle: React.CSSProperties = {
+  background: 'white',
+  borderRadius: '30px',
+  padding: '48px 40px',
+  maxWidth: '540px',
+  width: '100%',
+  boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+};
+
+const buttonStyle: React.CSSProperties = {
+  background: 'linear-gradient(135deg, #f5576c, #fda085)',
+  color: 'white',
+  border: 'none',
+  borderRadius: '50px',
+  padding: '16px 32px',
+  fontSize: '18px',
+  fontWeight: '700',
+  width: '100%',
+  cursor: 'pointer',
+  marginTop: '24px',
+  fontFamily: 'inherit',
+};
+
+export default function QuizPage() {
+  const [screen, setScreen] = useState<'intro' | 'quiz' | 'result'>('intro');
+  const [currentQ, setCurrentQ] = useState(0);
+  const [tally, setTally] = useState([0, 0, 0, 0]);
+  const [selected, setSelected] = useState<number | null>(null);
+
+  function startQuiz() {
+    setScreen('quiz');
+    setCurrentQ(0);
+    setTally([0, 0, 0, 0]);
+    setSelected(null);
+  }
+
+  function handleNext() {
+    if (selected === null) return;
+    const newTally = [...tally];
+    newTally[selected] += 1;
+    if (currentQ + 1 >= questions.length) {
+      setTally(newTally);
+      setScreen('result');
+    } else {
+      setTally(newTally);
+      setCurrentQ(currentQ + 1);
+      setSelected(null);
+    }
+  }
+
+  function getResult(): Personality {
+    return personalities[tally.indexOf(Math.max(...tally))];
+  }
+
+  // --- Intro Screen ---
+  if (screen === 'intro') {
+    return (
+      <div style={bgStyle}>
+        <div style={cardStyle}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '64px', marginBottom: '16px' }}>☕</div>
+            <h1 style={{ fontSize: '32px', fontWeight: '800', color: '#333', marginBottom: '16px', lineHeight: 1.2 }}>
+              What&apos;s Your Coffee Personality?
+            </h1>
+            <p style={{ color: '#888', fontSize: '16px', lineHeight: 1.6 }}>
+              Answer 5 quick questions to discover which coffee matches your true self.
+            </p>
+            <button style={buttonStyle} onClick={startQuiz}>
+              Start Quiz ✨
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Quiz Screen ---
+  if (screen === 'quiz') {
+    const q = questions[currentQ];
+    return (
+      <div style={bgStyle}>
+        <div style={cardStyle}>
+          {/* Progress dots */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '32px' }}>
+            {questions.map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  background: i <= currentQ ? '#f5576c' : '#eee',
+                  transition: 'background 0.3s',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Question */}
+          <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#333', marginBottom: '24px', textAlign: 'center' }}>
+            {q.text}
+          </h2>
+
+          {/* Options */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {q.options.map((option, i) => (
+              <button
+                key={i}
+                onClick={() => setSelected(option.personality)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '16px 20px',
+                  border: `2px solid ${selected === option.personality ? '#f5576c' : '#eee'}`,
+                  borderRadius: '16px',
+                  background: selected === option.personality ? '#fff5f7' : 'white',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  color: '#333',
+                  transition: 'all 0.2s',
+                  fontFamily: 'inherit',
+                }}
+              >
+                <span style={{ fontSize: '24px' }}>{option.emoji}</span>
+                <span>{option.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Next button */}
+          <button
+            style={{
+              ...buttonStyle,
+              opacity: selected === null ? 0.5 : 1,
+              cursor: selected === null ? 'not-allowed' : 'pointer',
+            }}
+            onClick={handleNext}
+            disabled={selected === null}
+          >
+            {currentQ + 1 >= questions.length ? 'See My Result 🎉' : 'Next →'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Result Screen ---
+  const result = getResult();
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div style={bgStyle}>
+      <div style={cardStyle}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '72px', marginBottom: '16px' }}>{result.emoji}</div>
+          <p style={{ color: '#f5576c', fontWeight: '700', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>
+            Your Coffee Personality
           </p>
+          <h2 style={{ fontSize: '30px', fontWeight: '800', color: '#333', marginBottom: '16px' }}>
+            {result.name}
+          </h2>
+          <p style={{ color: '#666', fontSize: '16px', lineHeight: 1.6, marginBottom: '24px' }}>
+            {result.tagline}
+          </p>
+          <div style={{
+            background: 'linear-gradient(135deg, #fff5f7, #fff)',
+            border: '2px solid #f5576c',
+            borderRadius: '20px',
+            padding: '20px 24px',
+            marginBottom: '8px',
+          }}>
+            <p style={{ color: '#aaa', fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
+              Your Perfect Brew
+            </p>
+            <p style={{ fontSize: '22px', fontWeight: '800', color: '#f5576c' }}>
+              ☕ {result.coffee}
+            </p>
+          </div>
+          <button style={buttonStyle} onClick={startQuiz}>
+            Retake Quiz 🔄
+          </button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }

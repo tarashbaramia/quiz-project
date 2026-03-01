@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Style 2 - Minimal & Clean</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #fafafa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .label {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .card {
+    background: white;
+    border-radius: 4px;
+    padding: 56px 48px;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.04);
+  }
+  .step {
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .progress-bar {
+    height: 2px;
+    background: #f0f0f0;
+    border-radius: 2px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 40%;
+    background: #111;
+    border-radius: 2px;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 40px;
+    line-height: 1.4;
+    letter-spacing: -0.3px;
+  }
+  .options { display: flex; flex-direction: column; gap: 2px; }
+  .option {
+    padding: 18px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 15px;
+    font-weight: 400;
+    color: #444;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .option:hover { color: #111; }
+  .option.selected { color: #111; font-weight: 500; }
+  .option.selected::after { content: '●'; font-size: 8px; color: #111; }
+  .option:not(.selected)::after { content: '○'; font-size: 8px; color: #ccc; }
+  .next-btn {
+    margin-top: 48px;
+    padding: 14px 32px;
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="label">STYLE 2 — Minimal & Clean</div>
+<div class="card">
+  <div class="step">Question 2 of 5</div>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <h1>It's Friday night. What are you watching?</h1>
+  <div class="options">
+    <div class="option selected">An action-packed thriller — edge of my seat</div>
+    <div class="option">A calm documentary — something to learn from</div>
+    <div class="option">A comedy with friends — the more the merrier</div>
+    <div class="option">Whatever's on — I'm not picky</div>
+  </div>
+  <button class="next-btn">Continue</button>
+</div>
+</body>
+</html>

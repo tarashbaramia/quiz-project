@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Style 1 - Playful & Colorful</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fda085 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .label {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .card {
+    background: white;
+    border-radius: 30px;
+    padding: 48px 40px;
+    max-width: 540px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .progress {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .progress-dot {
+    height: 8px;
+    border-radius: 4px;
+    flex: 1;
+    background: #eee;
+  }
+  .progress-dot.active { background: #f5576c; }
+  .emoji { font-size: 48px; margin-bottom: 16px; }
+  h1 {
+    font-size: 26px;
+    font-weight: 900;
+    color: #222;
+    margin-bottom: 32px;
+    line-height: 1.3;
+  }
+  .options { display: flex; flex-direction: column; gap: 14px; }
+  .option {
+    padding: 16px 20px;
+    border-radius: 16px;
+    border: 3px solid #f0f0f0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .option:hover { border-color: #f5576c; background: #fff5f5; transform: translateY(-2px); }
+  .option.selected { border-color: #f5576c; background: #fff0f0; }
+  .option-emoji { font-size: 24px; }
+  .next-btn {
+    margin-top: 28px;
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #f5576c, #fda085);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="label">STYLE 1 — Playful & Colorful</div>
+<div class="card">
+  <div class="progress">
+    <div class="progress-dot active"></div>
+    <div class="progress-dot active"></div>
+    <div class="progress-dot"></div>
+    <div class="progress-dot"></div>
+    <div class="progress-dot"></div>
+  </div>
+  <div class="emoji">🎬</div>
+  <h1>It's Friday night. What are you watching?</h1>
+  <div class="options">
+    <div class="option selected"><span class="option-emoji">💥</span> An action-packed thriller — edge of my seat</div>
+    <div class="option"><span class="option-emoji">🧘</span> A calm documentary — something to learn from</div>
+    <div class="option"><span class="option-emoji">😂</span> A comedy with friends — the more the merrier</div>
+    <div class="option"><span class="option-emoji">📺</span> Whatever's on — I'm not picky</div>
+  </div>
+  <button class="next-btn">Next Question →</button>
+</div>
+</body>
+</html>

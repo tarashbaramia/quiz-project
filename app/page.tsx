@@ -87,42 +87,23 @@ const questions: Question[] = [
   },
 ];
 
-const bgStyle: React.CSSProperties = {
-  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fda085 100%)',
-  minHeight: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '24px',
-  fontFamily: 'var(--font-nunito), Nunito, sans-serif',
-};
-
-const cardStyle: React.CSSProperties = {
-  background: 'white',
-  maxWidth: '540px',
-  width: '100%',
-  boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
-};
-
-const buttonStyle: React.CSSProperties = {
-  background: 'linear-gradient(135deg, #f5576c, #fda085)',
-  color: 'white',
-  border: 'none',
-  borderRadius: '50px',
-  padding: '16px 32px',
-  fontSize: '18px',
-  fontWeight: '700',
-  width: '100%',
-  cursor: 'pointer',
-  marginTop: '24px',
-  fontFamily: 'inherit',
-};
-
 export default function QuizPage() {
   const [screen, setScreen] = useState<'intro' | 'quiz' | 'loading' | 'result'>('intro');
   const [currentQ, setCurrentQ] = useState(0);
   const [tally, setTally] = useState([0, 0, 0, 0]);
   const [selected, setSelected] = useState<number | null>(null);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }, []);
+
+  useEffect(() => {
+    if (screen === 'loading') {
+      const timer = setTimeout(() => setScreen('result'), 1800);
+      return () => clearTimeout(timer);
+    }
+  }, [screen]);
 
   function startQuiz() {
     setScreen('quiz');
@@ -145,28 +126,97 @@ export default function QuizPage() {
     }
   }
 
-  useEffect(() => {
-    if (screen === 'loading') {
-      const timer = setTimeout(() => setScreen('result'), 1800);
-      return () => clearTimeout(timer);
-    }
-  }, [screen]);
-
   function getResult(): Personality {
     return personalities[tally.indexOf(Math.max(...tally))];
   }
+
+  // Theme
+  const t = {
+    cardBg:           isDark ? '#1e1e2e' : 'white',
+    text:             isDark ? '#e8e8f0' : '#333',
+    subtext:          isDark ? '#aaa'    : '#666',
+    muted:            isDark ? '#777'    : '#888',
+    optionBg:         isDark ? '#2a2a40' : 'white',
+    optionBgSelected: isDark ? '#3d1a2e' : '#fff5f7',
+    optionBorder:     isDark ? '#3a3a55' : '#eee',
+    progressBg:       isDark ? '#3a3a55' : '#eee',
+    brewCardBg:       isDark ? 'linear-gradient(135deg, #3a1a2e, #2a2040)' : 'linear-gradient(135deg, #fff5f7, #fff)',
+    shadow:           isDark ? '0 20px 60px rgba(0,0,0,0.5)' : '0 20px 60px rgba(0,0,0,0.15)',
+    toggleBg:         isDark ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.3)',
+  };
+
+  const bgStyle: React.CSSProperties = {
+    background: isDark
+      ? 'linear-gradient(135deg, #3d0a4a 0%, #5c1020 50%, #3d1a05 100%)'
+      : 'linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fda085 100%)',
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '24px',
+    fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+    transition: 'background 0.3s',
+  };
+
+  const cardStyle: React.CSSProperties = {
+    background: t.cardBg,
+    maxWidth: '540px',
+    width: '100%',
+    boxShadow: t.shadow,
+    transition: 'background 0.3s, box-shadow 0.3s',
+  };
+
+  const buttonStyle: React.CSSProperties = {
+    background: 'linear-gradient(135deg, #f5576c, #fda085)',
+    color: 'white',
+    border: 'none',
+    borderRadius: '50px',
+    padding: '16px 32px',
+    fontSize: '18px',
+    fontWeight: '700',
+    width: '100%',
+    cursor: 'pointer',
+    marginTop: '24px',
+    fontFamily: 'inherit',
+  };
+
+  const toggleButton = (
+    <button
+      onClick={() => setIsDark(!isDark)}
+      title="Toggle dark mode"
+      style={{
+        position: 'fixed',
+        top: '16px',
+        right: '16px',
+        background: t.toggleBg,
+        border: 'none',
+        borderRadius: '50%',
+        width: '44px',
+        height: '44px',
+        fontSize: '20px',
+        cursor: 'pointer',
+        backdropFilter: 'blur(10px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {isDark ? '☀️' : '🌙'}
+    </button>
+  );
 
   // --- Intro Screen ---
   if (screen === 'intro') {
     return (
       <div style={bgStyle}>
+        {toggleButton}
         <div style={cardStyle} className="quiz-card">
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '64px', marginBottom: '16px' }}>☕</div>
-            <h1 className="quiz-intro-title" style={{ fontWeight: '800', color: '#333', marginBottom: '16px', lineHeight: 1.2 }}>
+            <h1 className="quiz-intro-title" style={{ fontWeight: '800', color: t.text, marginBottom: '16px', lineHeight: 1.2 }}>
               What&apos;s Your Coffee Personality?
             </h1>
-            <p style={{ color: '#888', fontSize: '16px', lineHeight: 1.6 }}>
+            <p style={{ color: t.muted, fontSize: '16px', lineHeight: 1.6 }}>
               Answer 5 quick questions to discover which coffee matches your true self.
             </p>
             <button style={buttonStyle} onClick={startQuiz}>
@@ -183,6 +233,7 @@ export default function QuizPage() {
     const q = questions[currentQ];
     return (
       <div style={bgStyle}>
+        {toggleButton}
         <div style={cardStyle} className="quiz-card">
           {/* Progress bar */}
           <div style={{ marginBottom: '28px' }}>
@@ -190,11 +241,11 @@ export default function QuizPage() {
               <span style={{ fontSize: '13px', fontWeight: '700', color: '#f5576c' }}>
                 Question {currentQ + 1} of {questions.length}
               </span>
-              <span style={{ fontSize: '13px', fontWeight: '600', color: '#bbb' }}>
+              <span style={{ fontSize: '13px', fontWeight: '600', color: t.subtext }}>
                 {Math.round(((currentQ + 1) / questions.length) * 100)}%
               </span>
             </div>
-            <div style={{ background: '#eee', borderRadius: '50px', height: '8px', overflow: 'hidden' }}>
+            <div style={{ background: t.progressBg, borderRadius: '50px', height: '8px', overflow: 'hidden' }}>
               <div style={{
                 background: 'linear-gradient(135deg, #f5576c, #fda085)',
                 height: '100%',
@@ -206,7 +257,7 @@ export default function QuizPage() {
           </div>
 
           {/* Question */}
-          <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#333', marginBottom: '24px', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: '800', color: t.text, marginBottom: '24px', textAlign: 'center' }}>
             {q.text}
           </h2>
 
@@ -221,14 +272,14 @@ export default function QuizPage() {
                   alignItems: 'center',
                   gap: '12px',
                   padding: '16px 20px',
-                  border: `2px solid ${selected === option.personality ? '#f5576c' : '#eee'}`,
+                  border: `2px solid ${selected === option.personality ? '#f5576c' : t.optionBorder}`,
                   borderRadius: '16px',
-                  background: selected === option.personality ? '#fff5f7' : 'white',
+                  background: selected === option.personality ? t.optionBgSelected : t.optionBg,
                   cursor: 'pointer',
                   textAlign: 'left',
                   fontSize: '15px',
                   fontWeight: '600',
-                  color: '#333',
+                  color: t.text,
                   transition: 'all 0.2s',
                   fontFamily: 'inherit',
                 }}
@@ -260,6 +311,7 @@ export default function QuizPage() {
   if (screen === 'loading') {
     return (
       <div style={bgStyle}>
+        {toggleButton}
         <div style={cardStyle} className="quiz-card">
           <div style={{ textAlign: 'center' }}>
             <div style={{ position: 'relative', height: '90px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
@@ -280,26 +332,27 @@ export default function QuizPage() {
   const result = getResult();
   return (
     <div style={bgStyle}>
+      {toggleButton}
       <div style={cardStyle} className="quiz-card">
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '72px', marginBottom: '16px' }}>{result.emoji}</div>
           <p style={{ color: '#f5576c', fontWeight: '700', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>
             Your Coffee Personality
           </p>
-          <h2 className="quiz-result-name" style={{ fontWeight: '800', color: '#333', marginBottom: '16px' }}>
+          <h2 className="quiz-result-name" style={{ fontWeight: '800', color: t.text, marginBottom: '16px' }}>
             {result.name}
           </h2>
-          <p style={{ color: '#666', fontSize: '16px', lineHeight: 1.6, marginBottom: '24px' }}>
+          <p style={{ color: t.subtext, fontSize: '16px', lineHeight: 1.6, marginBottom: '24px' }}>
             {result.tagline}
           </p>
           <div style={{
-            background: 'linear-gradient(135deg, #fff5f7, #fff)',
+            background: t.brewCardBg,
             border: '2px solid #f5576c',
             borderRadius: '20px',
             padding: '20px 24px',
             marginBottom: '8px',
           }}>
-            <p style={{ color: '#aaa', fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
+            <p style={{ color: t.muted, fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
               Your Perfect Brew
             </p>
             <p style={{ fontSize: '22px', fontWeight: '800', color: '#f5576c' }}>
@@ -320,7 +373,7 @@ export default function QuizPage() {
           >
             Share My Result 🔗
           </button>
-          <button style={{ ...buttonStyle, marginTop: '12px', background: 'transparent', color: '#aaa', border: '2px solid #eee' }} onClick={startQuiz}>
+          <button style={{ ...buttonStyle, marginTop: '12px', background: 'transparent', color: t.muted, border: `2px solid ${t.optionBorder}` }} onClick={startQuiz}>
             Retake Quiz 🔄
           </button>
         </div>
